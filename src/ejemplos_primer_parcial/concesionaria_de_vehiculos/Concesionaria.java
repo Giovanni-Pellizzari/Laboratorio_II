@@ -37,22 +37,25 @@ public class Concesionaria implements Serializable {
 
     @Override
     public void guardar(String nombreArchivo) throws IOException{
-        try {
-            ObjectOutputStream flujoSalida = new ObjectOutputStream(new FileOutputStream(nombreArchivo));
-            // Escribe el objeto en un archivo
-            flujoSalida.writeObject(inventario);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+
+            try {
+                FileOutputStream fileOutputStream = new FileOutputStream("fichero2.txt");
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+                objectOutputStream.writeObject(inventario);
+                objectOutputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
+
 
     @Override
     public void cargar(String nombreArchivo){
         try  {
-            ObjectInputStream flujoEntrada = new ObjectInputStream(new FileInputStream(nombreArchivo));
-            Vehiculo concesionariaEntrada = (Vehiculo) flujoEntrada.readObject();
-            System.out.println(concesionariaEntrada.toString());
-
+            FileInputStream fileInputStream = new FileInputStream("fichero2.txt");
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            Vehiculo inventarios = (Vehiculo) objectInputStream.readObject();
+            objectInputStream.close();
             System.out.println("Concesionaria cargada desde " + nombreArchivo);
         }catch (IOException e){
              e.printStackTrace();
