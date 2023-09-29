@@ -1,6 +1,8 @@
 package ejemplos_primer_parcial.hotel;
 
-public abstract class Persona implements MostrarInformacion  {
+import java.io.Serializable;
+
+public abstract class Persona implements Serializable {
    private String nombre;
     private String apellido;
     private int dni;
@@ -10,7 +12,9 @@ public abstract class Persona implements MostrarInformacion  {
         this.apellido = apellido;
         this.dni = dni;
     }
-
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
     public String getNombre() {
         return nombre;
     }
@@ -22,6 +26,8 @@ public abstract class Persona implements MostrarInformacion  {
     public int getDni() {
         return dni;
     }
+
+    public abstract void mostrarInformacion();
 }
 
 

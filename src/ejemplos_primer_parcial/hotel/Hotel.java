@@ -1,31 +1,30 @@
 package ejemplos_primer_parcial.hotel;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hotel {
-    private String nombre;
+public class Hotel implements Serializable {
+    private String nombreHotel;
     private ArrayList<Habitacion> habitaciones;
 
-    Habitacion habitacion1 = new Habitacion(1,1,1,false,new ArrayList<Huesped>());
-    Habitacion habitacion2 = new Habitacion(2,2,2,false,new ArrayList<Huesped>());
-    Habitacion habitacion3 = new Habitacion(3,2,4,false,new ArrayList<Huesped>());
+    public Hotel(String nombreHotel) {
+        this.nombreHotel = nombreHotel;
+        this.habitaciones = new ArrayList<>();
+    }
 
-    public void hotel(String nombre) {
-        this.nombre = nombre;
+    public void agregarHabitacion(Habitacion habitacion) {
+        this.habitaciones.add(habitacion);
     }
 
 
+    public void verListaHabitaciones() {
+        System.out.println("Nombre del Hotel: " + nombreHotel + "\n");
+        System.out.println("LISTA DE HABITACIONES: \n");
 
-
-    public void verListaDeHabitaciones() {
-        System.out.println("Lista de habitaciones del hotel " + nombre);
         for (Habitacion habitacion : habitaciones) {
-            System.out.println("Habitación " + habitacion.getNumero() + ": " + (habitacion.isOcupada() ? "Ocupada" : "Disponible"));
+            habitacion.mostrarInformacion();
+            System.out.println();
         }
     }
 
@@ -33,10 +32,28 @@ public class Hotel {
         return habitaciones;
     }
 
-    public String cargarNombreDelHotel() {
+    public void guardarReservasEnArchivo(String nombreArchivo) {
+        try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(nombreArchivo))) {
+            salida.writeObject(this);
+            System.out.println("Reservas guardadas en archivo exitosamente.");
+        } catch (IOException e) {
+            System.err.println("Error al guardar las reservas en el archivo: " + e.getMessage());
+        }
+    }
+
+    public static Hotel cargarReservasDesdeArchivo(String nombreArchivo) {
+        try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(nombreArchivo))) {
+            return (Hotel) entrada.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error al cargar las reservas desde el archivo: " + e.getMessage());
+            return null;
+        }
+    }
+
+    /*public String cargarNombreDelHotel(String nombreHotel) {
         String nombreDelHotel = "Nombre Predeterminado"; // Nombre predeterminado en caso de que la carga falle
 
-        try (FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Agustina\\Desktop\\nombre_hotel.txt");
+        try (FileInputStream fileInputStream = new FileInputStream(nombreHotel);
              InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
              BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
 
@@ -47,5 +64,5 @@ public class Hotel {
         }
 
         return nombreDelHotel;
-    }
+    }*/
 }

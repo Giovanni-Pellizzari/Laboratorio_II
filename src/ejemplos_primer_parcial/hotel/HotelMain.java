@@ -1,15 +1,36 @@
 package ejemplos_primer_parcial.hotel;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class HotelMain {
     public static void main(String[] args){
-        Hotel hotel = new Hotel();
         Scanner scanner = new Scanner(System.in);
 
+        String nombreHotel = "Nombre Predeterminado"; // Nombre predeterminado en caso de que la carga falle
+
+        try (FileInputStream fileInputStream = new FileInputStream("C:\\Users\\JOVA\\Desktop\\nombreHotel.txt");
+             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+             BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+            nombreHotel = bufferedReader.readLine();
+
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar el nombre del hotel desde el archivo. Se usará un nombre predeterminado.");
+        }
+
+        Hotel hotel = new Hotel(nombreHotel);
+
+        hotel.agregarHabitacion(new Habitacion(1,2,2));
+        hotel.agregarHabitacion(new Habitacion(2,2,2));
+        hotel.agregarHabitacion(new Habitacion(3,4,4));
+
         do {
-            System.out.println("Menú del hotel " + hotel.cargarNombreDelHotel());
+            System.out.println("Menú del hotel " + nombreHotel);
             System.out.println("1- Ver lista de habitaciones");
             System.out.println("2- Reservar una habitación");
             System.out.println("3- Cancelar una reserva");
@@ -21,69 +42,71 @@ public class HotelMain {
 
             switch (opc){
 
-                case 1:{
-                    hotel.verListaDeHabitaciones();
-                }
+                case 1:
+                    hotel.verListaHabitaciones();
+
                 break;
-                case 2:{
-                    System.out.print("Ingrese el nombre del huésped: ");
-                    String nombreHuesped = scanner.next();
-                    System.out.print("Ingrese el apellido del huésped: ");
-                    String apellidoHuesped = scanner.next();
-                    System.out.print("Ingrese el DNI del huésped: ");
-                    int dniHuesped = scanner.nextInt();
-
-                    // Crear un objeto Huesped con la información proporcionada
-                    Huesped nuevoHuesped = new Huesped(nombreHuesped, apellidoHuesped, dniHuesped);
-
-                    Habitacion habitacionDisponible = null;
-                    for (Habitacion habitacion : hotel.getHabitaciones()) {
-                        if (!habitacion.isOcupada()) {
-                            habitacionDisponible = habitacion;
-                            break; // Encontramos una habitación disponible, salimos del bucle
-                        }
-                    }
-
-                    if (habitacionDisponible != null) {
-                        // Realizar la reserva
-                        habitacionDisponible.reservar(nuevoHuesped);
-                    } else {
-                        System.out.println("Lo siento, no hay habitaciones disponibles.");
-                    }
-                }
-                break;
-                case 3:{
-                    System.out.print("Ingrese el número de habitación a cancelar: ");
+                case 2:
+                    System.out.println("Ingrese el número de habitación que desea reservar: ");
                     int numeroHabitacion = scanner.nextInt();
-
-                    // Buscar la habitación por número
-                    Habitacion habitacionSeleccionada = null;
-                    for (Habitacion habitacion : hotel.getHabitaciones()) {
-                        if (habitacion.getNumero() == numeroHabitacion) {
-                            habitacionSeleccionada = habitacion;
+                    System.out.println("Ingrese la cantidad de huéspedes que se hospedarán en la habitación: ");
+                    int cantidadHuespedes = scanner.nextInt();
+                    List<Huesped> huespedes = new ArrayList<>();
+                    for (int i = 0; i < cantidadHuespedes; i++) {
+                        System.out.println("Ingrese el nombre del huésped " + (i + 1) + ": ");
+                        String nombre = scanner.next();
+                        System.out.println("Ingrese apellido del huésped " + (i + 1) + ": ");
+                        String apellido = scanner.next();
+                        System.out.println("Ingrese su DNI o número de pasaporte: ");
+                        int dni = scanner.nextInt();
+                        huespedes.add(new Huesped(nombre, apellido, dni));
+                    }
+                    Habitacion habitacion = null;
+                    for (Habitacion h : hotel.getHabitaciones()) {
+                        if (h.getNumeroHabitacion() == numeroHabitacion) {
+                            habitacion = h;
                             break;
                         }
                     }
-                    if (habitacionSeleccionada != null && habitacionSeleccionada.isOcupada()) {
-                        // Cancelar la reserva
-                        habitacionSeleccionada.cancelarReserva();
+                    if (habitacion != null) {
+                        habitacion.reservar(huespedes);
+                        System.out.println("Habitación reservada exitosamente.");
                     } else {
-                        System.out.println("La habitación no existe o no está ocupada.");
+                        System.out.println("No se encontró la habitación con el número ingresado.");
                     }
-                }
+
                 break;
-                case 4:{
-                    System.out.println("we");
-                }
+                case 3:
+                    System.out.println("Ingrese el número de habitación que desea cancelar la reserva: ");
+                    numeroHabitacion = scanner.nextInt();
+                    habitacion = null;
+                    for (Habitacion h : hotel.getHabitaciones()) {
+                        if (h.getNumeroHabitacion() == numeroHabitacion) {
+                            habitacion = h;
+                            break;
+                        }
+                    }
+                    if (habitacion != null) {
+                        habitacion.cancelarReserva();
+                        System.out.println("Reserva cancelada exitosamente.");
+                    } else {
+                        System.out.println("No se encontró la habitación con el número ingresado.");
+                    }
+
+                break;
+                case 4:
+                    hotel.guardarReservasEnArchivo("Reservas.txt");
                 break;
                 case 5:{
-                    System.out.println("wer");
+                    hotel = Hotel.cargarReservasDesdeArchivo("Reservas.txt");
                 }
                 break;
                 case 6:{
                     System.out.println("chau");
                     return;
                 }
+                default:
+                    System.out.println("Opcion no valida, intente nuevamente con una opcion entre 1 y 6");
             }
 
         }while (true);
