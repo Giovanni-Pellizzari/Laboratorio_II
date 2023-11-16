@@ -41,9 +41,9 @@ public class HospitalManejo {
         }
     }
 
-    public HospitalManejo cargarReservasDesdeArchivo(String nombreArchivo) {
+    public Hospital cargarReservasDesdeArchivo(String nombreArchivo) {
         try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(nombreArchivo))) {
-            return (HospitalManejo) entrada.readObject();
+            return (Hospital) entrada.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Error al cargar desde el archivo: " + e.getMessage());
             return null;
@@ -63,8 +63,6 @@ public class HospitalManejo {
                     }
                 }
             }
-
         }
-
     }
 }

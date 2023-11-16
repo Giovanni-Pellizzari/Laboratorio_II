@@ -12,7 +12,7 @@ public class Hospital {
         HospitalManejo hospitalManejo = new HospitalManejo();
 
         hospitalManejo.agregarDoctor(new Doctores("Juan",43234525,11031990,"Clinica"));
-        hospitalManejo.agregarDoctor(new Doctores("Julia", 42444332,21011988,"Cirujia"));
+        hospitalManejo.agregarDoctor(new Doctores("Julian", 42444332,21011988,"Cirujia"));
         hospitalManejo.agregarDoctor(new Doctores("Agustina",43933727, 21012002,"Pediatra"));
 
         do {
@@ -71,10 +71,10 @@ public class Hospital {
                     System.out.println("4");
                 break;
                 case 5:
-                    hospitalManejo.guardarReservasEnArchivo("nombreDelArchivo");
+                    hospitalManejo.guardarReservasEnArchivo("hospital.txt");
                 break;
                 case 6:
-                    hospitalManejo.cargarReservasDesdeArchivo("nombreDelArchivo");
+                    hospitalManejo.cargarReservasDesdeArchivo("hospital.txt");
                 break;
                 case 7:
                     System.out.println("hasta luego");
