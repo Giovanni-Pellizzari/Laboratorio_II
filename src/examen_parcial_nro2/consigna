@@ -1,0 +1,195 @@
+1. Crear la Clase DBHelper (0,3 p.)
+
+Desarrolla una clase llamada DBHelper que actúa como utilidad de acceso a una base de datos MySQL. Esta clase debe proporcionar métodos para ejecutar consultas SQL tanto con como sin devolución de resultados.
+La clase debe gestionar adecuadamente la conexión y el cierre de recursos, siguiendo las mejores prácticas de manejo de excepciones.
+Utiliza la clase DriverManager para establecer la conexión con la base de datos, y asegúrate de implementar el patrón de excepciones.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+2. Creación de las Clases Producto y Vendedor con Atributos Equivalentes de la Base de Datos (0,7 p.)
+
+Crear las clases Producto y Vendedor con atributos que reflejan los campos correspondientes en la base de datos. Las clases deben tener sus respectivos constructores.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3. Creación de un Constructor Adicional en la clase Vendedor (0,5 p.)
+Agrega a la clase Vendedor un constructor adicional que acepte una consulta SQL como parámetro para buscar un vendedor por su ID.
+La consulta proporcionada deberá seleccionar todos los campos de la tabla vendedores para el ID especificado.
+
+El método debe ser así:
+public Vendedor(String consultaBusqueda) {
+    // Implementa el código para cargar los datos del vendedor usando la consulta    proporcionada
+}
+
+Un ejemplo de utilización del método para crear un nuevo vendedor a partir de una consulta cuyo ID es el 3.
+
+Vendedor vendedorBuscado = new Vendedor("SELECT * FROM `vendedores` WHERE `vendedor_id` = 3");
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+4. Obtener los datos de un Vendedor (1,5 p.)
+
+Implementa el método obtenerVendedorPorID(int vendedorID) en la clase Comerciales:
+
+public static Vendedor obtenerVendedorPorID(int vendedorID) {
+    // TODO: Implementa el código necesario para obtener la información.
+    // Utiliza la clase DBHelper para ejecutar la consulta SQL correspondiente.
+    return null; // en caso de que la consulta sea opuesta a resultado != null && resultado.next()
+}
+
+La consulta a ejecutar es:
+SELECT * FROM vendedores WHERE vendedor_id = 3
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+5. Generación de Informe de Productos en Stock (2 p.)
+
+Implementa un método en Java llamado generarInforme() que debe realizar la consulta SQL ("SELECT * FROM productos") para obtener información sobre los productos en stock, calcular el valor total de cada producto (precio por unidad * stock), y finalmente, mostrar un informe formateado en la consola que incluya:
+Nombre del producto.
+Cantidad en stock.
+Precio por unidad.
+Valor total del producto (stock * precio por unidad).
+Valor total de todos los productos en stock.
+
+El formato del Informe debe ser el siguiente:
+
+Informe de Productos en Stock:
+Producto                        Stock    Precio     Total
+----------------------------------------------------------
+NombreProducto1                 10       19.99     199.90
+NombreProducto2                 5        29.99     149.95
+...                              ...      ...       ...
+----------------------------------------------------------
+                              Total:                XXXX.XX
+
+
+El método debe poseer la siguiente forma:
+
+public static void generarInforme() {
+      //implementación
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+6. Obtener Producto por ID (1 p.)
+Implementa el método obtenerProducto(int productoID) en la clase Productos. Este método toma un parámetro productoID que representa el ID del producto que se desea obtener.
+La función debe realizar una consulta SQL (SELECT * FROM productos WHERE producto_id = 12) para seleccionar y devolver un objeto Producto que contenga la información completa del producto con el ID proporcionado.
+
+El método debe ser así:
+
+public static Producto obtenerProducto(int productoID){
+   // TODO: Implementa el código necesario para obtener la información.
+   // Utiliza la clase DBHelper para ejecutar la consulta SQL correspondiente.
+   return null; // en caso de que la consulta sea opuesta a resultado != null && resultado.next()
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+7. Obtener el Producto Más Vendido (2 p.)
+En la clase Productos, implementa el método obtenerProductoMasVendido() que devuelva el objeto Producto correspondiente al producto más vendido.
+Cuando el método encuentre la ID del producto más vendido deberá utilizar el método obtenerProducto(producto_id) del punto 6 para retornar el Producto más vendido
+
+Firma del Método:
+
+public static Producto obtenerProductoMasVendido(){
+   // TODO: Implementa el código necesario para obtener la información.
+   // Utiliza la clase DBHelper para ejecutar la consulta SQL correspondiente.
+   // Si encuentra el producto ejecuta return obtenerProducto(producto_id);
+   return null; // en caso de que la consulta sea opuesta a (resultado != null && resultado.next())
+   }
+
+
+Consulta SQL para Obtener Producto Más Vendido:
+
+SELECT producto_id, SUM(cantidad_vendida) as total_vendido
+FROM ventas
+GROUP BY producto_id
+ORDER BY total_vendido DESC
+LIMIT 1
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+8. Obtener el Listado de Vendedores (2 p.)
+Desarrolla un método llamado listadoDeVendedores() dentro de la clase Comerciales. Este método debe ser estático y devolver un ArrayList de objetos tipo Vendedor.
+La función debe realizar una consulta a la base de datos para obtener todos los registros de la tabla 'vendedores' mediante la sentencia SQL “SELECT * FROM vendedores”.
+Luego, para cada resultado obtenido, crea un objeto Vendedor con los datos correspondientes y lo agrega a la lista.
+Finalmente, la función debe retornar la lista completa de vendedores. Maneja cualquier excepción de SQL que pueda surgir durante la ejecución del método
+
+public static ArrayList<Vendedor> listadoDeVendedores() {
+   // TODO: Implementa el código necesario para obtener la información.
+   // Utiliza la clase DBHelper para ejecutar la consulta SQL correspondiente.
+}
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Esquema sugerido de clases del programa
+El esquema no posee los parámetros que reciben los métodos.
+
++-----------------------------------+
+|      DBHelper                     |
++-----------------------------------+
+| - URL                             |
+| - USER                            |
+| - PASSWORD                        |
++-----------------------------------+
+| + ejecutarConsulta()              |
+| + ejecutarConsultaConResultado()  |
++-----------------------------------+
+
++-------------------------------+
+|      Productos                |
++-------------------------------+
+| + generarInforme()            |
+| + obtenerProducto()           |
+| + obtenerProductoMasVendido() |
++-------------------------------+
+
++-----------------------+
+|       Producto        |
++-----------------------+
+| - producto_id         |
+| - nombre              |
+| - precio_por_unidad   |
+| - stock               |
++-----------------------+
+| + toString()          |
++-----------------------+
+
++-----------------------+
+|      Vendedor         |
++-----------------------+
+| - vendedor_id         |
+| - nombre              |
+| - apellido            |
+| - dni                 |
+| - fecha_nacimiento    |
+| - fecha_contratacion  |
++-----------------------+
+| + toString()          |
++-----------------------+
+
++-----------------------+
+|        Venta          |
++-----------------------+
+| - venta_id            |
+| - vendedor_id         |
+| - producto_id         |
+| - cantidad_vendida    |
+| - fecha_venta         |
++-----------------------+
+
++--------------------------+
+|     Comerciales          |
++--------------------------+
+| + obtenerVendedorPorID() |
+| + listadoDeVendedores()  |
++--------------------------+
+
++----------------------+
+| SistemaDeVentas      |
++----------------------+
+| + main()             |
++----------------------+
+
+

@@ -4,7 +4,7 @@ public class HospitalBasesDeDatos {
     //main del programa
     public static void main(String[] args) {
         //creamos un objeto de la clase Hospital
-        Hospital hospital = new Hospital();
+
         //agregar un paciente de ejemplo
         //Date fechaActual = new Date(2023 - 1900, 1 - 1, 10);
         //Paciente paciente = new Paciente("Juan Bonete", 45, "Ninguno", 1, fechaActual);
@@ -22,7 +22,7 @@ public class HospitalBasesDeDatos {
         //listar pacientes entre dos fechas
         Date fechaDesde = new Date(2023 - 1900, 1 - 1, 1);
         Date fechaHasta = new Date(2023 - 1900, 1 - 1, 10);
-        hospital.listarPacientesEntreDosFechas(fechaDesde, fechaHasta);
+
     }
 
     // 1. Define la clase abstracta Persona con atributos comunes para pacientes y doctores.
